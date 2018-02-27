@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<table th:fragment="valuta" th:if="${valute} != null">
+	  <tr>
+	  	<!-- <th>Редни број:</th> -->
+	    <th>Валута</th>
+	    <th>Ознака</th>
+	  </tr>	  
+	  <tr th:each="p : ${valute}">
+	    <!-- <td th:text="${p.valutaId}"></td> -->
+	    <td th:text="${p.valutaNaziv}"></td>
+	    <td th:text="${p.valutaOznaka}"></td>
+	  </tr>	  
+	</table> 
+
+	<table th:fragment="vrsta_robe" th:if="${vrsteArtikla} != null">
+	  <tr>
+	  	<!-- <th>Редни број:</th> -->
+	    <th>Врста артикла</th>
+	  </tr>	  
+	  <tr th:each="p : ${vrsteArtikla}">
+	    <!-- <td th:text="${p.vrstaRobeId}"></td> -->
+	    <td th:text="${p.vrstaRobeNaziv}"></td>
+	  </tr>	  
+	</table> 
+		
+	<table th:fragment="korisnici" th:if="${korisnici} != null">
+	  <tr>
+	    <!-- <th>Редни број:</th> -->
+	    <th>Назив Корисника</th>
+	    <th>Валута Којом Плаћа</th>
+	    <th>Поруџбенице</th>
+	    <!-- <th>Нова Поруџбеница</th> -->
+	    <th>Дуговања и уплате</th>
+	  </tr>	  
+	  <tr th:each="p : ${korisnici}">
+	    <!-- <td th:text="${p.korisnikId}"></td> -->
+	    <td><a th:href="@{'/korisnik/' + ${p.korisnikId}}" th:text="${p.korisnikNaziv}"> </a></td>
+	    <td th:text="${p.valuta.valutaNaziv}"></td>
+	    <td><a th:href="@{'/porudzbenice/' + ${p.korisnikId}}">Поруџбенице</a></td>
+	   <!--  <td><a th:href="@{'/porudzbenica/' + ${p.korisnikId}}">Нова Поруџбеница</a></td> -->
+	    <td><a th:href="@{'/placanja/' + ${p.korisnikId}}">Дуговања и уплате</a></td>
+	  </tr>	  
+	</table>   
+	
+	<table th:fragment="roba" th:if="${robe} != null">
+	  <tr>
+	    <!-- <th>Редни број артикла</th> -->
+	    <th>Назив артикла</th>
+	    <th>Врста артикла</th>
+	  </tr>	  
+	  <tr th:each="p : ${robe}">
+	    <!-- <td th:text="${p.robaId}"></td> -->
+	    <td><a th:href="@{'/roba/' + ${p.robaId}}" th:text="${p.robaNaziv}"> </a></td>
+	    <td th:text="${p.vrstaRobe.vrstaRobeNaziv}"></td>
+	  </tr>	  
+	</table>  
+	 
+	<table th:fragment="cenovnik" th:if="${cene} != null">
+	  <tr>
+	    <!-- <th>Редни број:</th> -->
+	    <th>Артикал</th>
+	    <th>Валута</th>
+	    <th>Цена</th>
+	  </tr>	  
+	  <tr th:each="p : ${cene}">
+	   <!--  <td th:text="${p.cenovnikId}"></td> -->
+	    <td th:text="${p.roba.robaNaziv}"></td>
+	    <td th:text="${p.valuta.valutaNaziv}"></td>
+	    <td th:text="${#numbers.formatDecimal(p.cena, 0, 'COMMA', 2, 'POINT')}"></td>
+	  </tr>	  
+	</table>
+	
+	<table th:fragment="poruzbenica">
+	  <tr>
+	   <!--  <th>Porudzbenica Id</th> -->
+	    <th>Korisnik</th>
+	    <th>Datum</th>
+	  </tr>	  
+	  <tr th:each="p : ${korisnik.porudzbenicas}">
+	   <!--  <td th:text="${p.porudzbenicaId}"></td> -->
+	    <td th:text="${korisnik.korisnikNaziv}"></td>
+	    <td th:text="${p.datumPorudzbenice}"></td>
+	  </tr>	  
+	</table>
+	
+	<table th:fragment="porudzbenica_stavke">
+	<tr>
+		<th>Корисник</th>
+		<th>Поруџбенице</th>
+		<th></th>
+	</tr>
+	<tr>
+		<td th:text="${porudzbenica.korisnik.korisnikNaziv}"></td>
+		<td><a th:href="@{'/porudzbenice/' + ${porudzbenica.korisnik.korisnikId}}">Поруџбенице Корисника</a></td>
+		<th:block th:switch="${porudzbenica.otvorena}">
+			<td th:case="true"><a th:href="@{'/zatvori_porudzbenicu/' + ${porudzbenica.porudzbenicaId}}">Затвори поруџбеницу</a></td>
+			<td th:case="false"></td>
+		</th:block>
+		
+	</tr>
+	  <tr>
+	   <!--  <th>Редни број</th> -->
+	    <th>Редни број ставке</th>
+	    <th>Артикал</th>
+	    <th>Количина</th>
+	    <th>Бриши Ставку</th>
+	  </tr>	  
+	  <tr th:each="p : ${porudzbenica.porudzbenicaStavkes}">
+	   <!--  <td th:text="${p.id.porudzbenicaId}"></td> -->
+	    <td th:text="${p.id.porudzbenicaStavkaId}"></td>
+	    <td th:text="${p.robaCenovnik.roba.robaNaziv}"></td>
+	    <td th:text="${p.kolicina}"></td>
+	    <td th:if="${porudzbenica.otvorena} == true"><a th:if="${p.id.porudzbenicaStavkaId} == ${stavka}" th:href="@{'/brisi_stavku/' + ${p.id.porudzbenicaId}+ '/'+ ${p.id.porudzbenicaStavkaId}}">Бриши Ставку</a></td>
+	  </tr>	  
+	</table>  	
+	
+	<table th:fragment="porudzbenice">
+	<tr>
+		<th>Корисник</th>
+		<th>Нова поруџбеница</th>
+	</tr>
+	<tr>
+		<td th:text="${korisnik.korisnikNaziv}"></td>
+		<!-- <a th:href="@{'/porudzbenica/' + ${korisnik.korisnikId}}">Нова Поруџбеница</a> -->
+		<td>
+			<form  action="#" th:action="@{/porudzbenica}" th:object="${porudzbenica}" method="post">
+			<input type="hidden" id="porudzbenica.korisnik.korisnikId" name="korisnik.korisnikId"  th:value="${korisnik.korisnikId}"/>
+	
+			<input th:field="${porudzbenica.popust}" placeholder="Попуст" maxlength="2" type="number"/>
+			<input th:field="${porudzbenica.datumPorudzbenice}" class="datepicker" />
+			<input type="submit" value="Нова поруџбеница" />
+	
+			</form>
+		</td>
+	</tr>
+	  <tr>
+	   <!--  <th>Редни број:</th> -->
+	    <th>Поруџбеница креирана</th>
+	    <th>Поруџбеница послата</th>
+	    <th>Отворена</th>
+	    <th>Цена</th>
+	    <th>Попуст</th>
+	    <th>За плаћање</th>
+	    <th>Ставке Поруџбенице</th>
+	    <th>Штампај</th>
+	    <th>Бриши</th>
+	  </tr>	  
+	  <tr th:each="p : ${porudzbenice}">
+	   <!--  <td th:text="${p.porudzbenicaId}"></td> -->
+	    <td th:text="${p.datumPorudzbenice}"></td>
+	    <td th:text="${p.datumZatvaranja}"></td>
+	    <th:block th:switch="${p.otvorena}">
+			<td th:case="false">Поруџбеница је затворена</td>
+			<td th:case="true">Поруџбеница је отворена</td>
+		</th:block>
+	    <td th:text="${p.cena} ? ${#numbers.formatDecimal(p.cena, 0, 'COMMA', 2, 'POINT')} + ' ' + ${p.korisnik.valuta.valutaOznaka} : ${p.cena}"></td>
+	    <td th:text="${p.popust} ? ${p.popust} + '%': null"></td>
+	    <td th:text="(${p.cena != null} ? (${p.popust != null} ? ${#numbers.formatDecimal(p.cena - (p.cena*p.popust)/100, 0, 'COMMA', 2, 'POINT')} + ' ' + ${p.korisnik.valuta.valutaOznaka} : ${#numbers.formatDecimal(p.cena, 0, 'COMMA', 2, 'POINT')}+ ' ' + ${p.korisnik.valuta.valutaOznaka}))"></td>
+	    <td><a th:href="@{'/porudzbenica_stavke/' + ${p.porudzbenicaId}}">Ставке</a></td>
+	    <th:block th:switch="${p.otvorena}">
+			<td th:case="false"><a th:href="@{'/stampaj_porudzbenicu/' + ${p.porudzbenicaId}}">Штампај</a></td>
+			<td th:case="true"></td>
+		</th:block>
+		<th:block th:switch="${p.otvorena}">
+			<td th:case="false"></td>
+			<td th:case="true"><a th:href="@{'/brisi_poruzbenicu/' + ${p.porudzbenicaId}}">Бриши</a></td>
+		</th:block>
+	  </tr>	  
+	</table> 
+	
+	<table th:fragment="uplata">
+	<tr>
+		<th>Корисник</th>
+		<th>Укупно дуговање</th>
+		<th>Укупно плаћено</th>
+		<th>Разлика</th>
+	</tr>
+	<tr>
+		<td th:text="${korisnik.korisnikNaziv}"></td>
+		<td th:text="${#numbers.formatDecimal(ukupnoPoruceno, 0, 'COMMA', 2, 'POINT')}"></td>
+		<td th:text="${#numbers.formatDecimal(ukupnoPlaceno, 0, 'COMMA', 2, 'POINT')}"></td>
+		<td th:text="${#numbers.formatDecimal(ukupnoPoruceno - ukupnoPlaceno, 0, 'COMMA', 2, 'POINT')}"></td>
+	</tr>
+	  <tr>
+	   <!--  <th>Редни број</th> -->
+	    <th>Датум</th>
+	    <th>Износ</th>
+	    <th>Потврди</th>
+	    <th>Избриши</th>
+	  </tr>	  
+	  <tr th:each="p : ${korisnik.placanjas}">
+	  <!--   <td th:text="${p.placanjaId}"></td> -->
+	    <td th:text="${p.datumPlacanja}"></td>
+	    <td th:text="${#numbers.formatDecimal(p.iznos, 0, 'COMMA', 2, 'POINT')}"></td>
+	    <th:block th:switch="${p.potvrdjena}">
+			<td th:case="false"><a th:href="@{'/potvrdi_placanje/' + ${p.placanjaId}}">Потврди</a></td>
+			<td th:case="true"></td>
+		</th:block>
+	    <th:block th:switch="${p.potvrdjena}">
+			<td th:case="true"></td>
+			<td th:case="false"><a th:href="@{'/izbrisi_placanje/' + ${p.placanjaId}}">Избриши</a></td>
+		</th:block>
+	  </tr>	  
+	</table>  
+</body>
+</html>

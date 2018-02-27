@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+
+	<form class="form-container" th:fragment="valuta" action="#" th:action="@{/valuta}" th:object="${valuta}" method="post">
+		<div class="form-title"><h2>Унесите Валауту</h2></div>
+		<div class="form-title">Назив Валуте:</div>
+		<input class="form-field" th:field="*{valutaNaziv}" placeholder="Назив Валуте" maxlength="20" type="text" /><br />
+		<div class="form-title">Ознака Валуте:</div>
+		<input class="form-field" th:field="*{valutaOznaka}" placeholder="Ознака Валуте" maxlength="3" type="text" /><br />
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>
+
+  	<form class="form-container" th:fragment="korisnik" action="#" th:action="@{/korisnik}" th:object="${korisnik}" method="post">
+		
+		<input th:if="*{korisnikId} != null" type="hidden" th:field="*{korisnikId}" />
+		
+		<div class="form-title"><h2>Унос Корисника</h2></div>
+		<div class="form-title">Назив Корисника:</div>
+		<input class="form-field" th:field="*{korisnikNaziv}" placeholder="унесите назив корисника" maxlength="40" type="text" /><br />
+		
+		<div class="form-title">Адреса Корисника:</div>
+		<input class="form-field" th:field="*{korisnikAdresa}" placeholder="унесите адресу корисника" maxlength="40" type="text" /><br />
+		<div class="form-title">Почетно дуговање:</div>
+		<input class="form-field" th:field="*{pocetnoDugovanje}" placeholder="унесите почетно дуговање" maxlength="40" type="text" /><br />
+		<div class="form-title">Валута којом плаћа:</div>
+		<ul th:if="${#fields.hasErrors('korisnikAdresa')}"><li th:errors="*{korisnikAdresa}"></li></ul>
+		<select class="form-field" th:field="*{valuta.valutaId}" id="spisakValuta">
+			<option th:each="p : ${valuta}" th:value="${p.valutaId}" th:text="${p.valutaNaziv}">Option1</option>
+		</select>		
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Потврди" />
+		</div>
+	</form>	
+
+ 	<form class="form-container" th:fragment="vrsta_robe" action="#" th:action="@{/vrsta_robe}" th:object="${vrstaRobe}" method="post">
+		<div class="form-title"><h2>Унесите врсту артикла:</h2></div>
+		<div class="form-title">Врста артикла:</div>
+		<input class="form-field" th:field="*{vrstaRobeNaziv}" placeholder="Врста артикла" maxlength="20" type="text" /><br />
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>
+ 	
+   	<form class="form-container" th:fragment="roba" action="#" th:action="@{/roba}" th:object="${roba}" method="post">
+		
+		<input th:if="*{robaId} != null" type="hidden" th:field="*{robaId}" />
+		
+		<div class="form-title"><h2>Унесите артикал</h2></div>
+		<div class="form-title">Назив артикла:</div>
+		<input class="form-field" th:field="*{robaNaziv}" placeholder="Text" maxlength="20" type="text" /><br />
+		<div class="form-title">Изаберите врсту артикла:</div>
+		<select class="form-field" th:field="*{vrstaRobe.vrstaRobeId}" id="spisakRobe">
+			<option th:each="p : ${vrstaRobe}" th:value="${p.vrstaRobeId}" th:text="${p.vrstaRobeNaziv}">Option1</option>
+		</select>		
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>	
+
+  	<form class="form-container" th:fragment="cenovnik" action="#" th:action="@{/cenovnik}" th:object="${robaCenovnik}" method="post">
+		<div class="form-title"><h2>Ценовник</h2></div>		
+		<div class="form-title">Изаберите артикал:</div>
+		<select class="form-field" th:field="*{roba.robaId}" id="valuta">
+			<option th:each="p : ${roba}" th:value="${p.robaId}" th:text="${p.robaNaziv}">Option1</option>
+		</select>
+		<div class="form-title">Изаберите валуту:</div>
+		<select class="form-field" th:field="*{valuta.valutaId}" id="spisakValuta">
+			<option th:each="p : ${valuta}" th:value="${p.valutaId}" th:text="${p.valutaNaziv}">Option1</option>
+		</select>
+		<div class="form-title">Унесите цену:</div>
+		<input class="form-field" th:field="*{cena}" placeholder="Цена" maxlength="20" type="text" /><br />	
+		<!-- <div class="form-title">Aktivna:</div>
+		<input class="form-field" th:field="*{aktivna}" placeholder="Text" maxlength="20" type="text" /><br />	 -->	
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>	
+
+   	<form class="form-container" th:fragment="magacin" action="#" th:action="@{/magacin}" th:object="${magacin}" method="post">
+		<div class="form-title"><h2>Magacin</h2></div>
+		<div class="form-title">Unesi količinu:</div>
+		<input class="form-field" th:field="*{kolicina}" placeholder="Text" maxlength="20" type="text" /><br />
+		<div class="form-title">Izaberi robu:</div>
+		<select class="form-field" th:field="*{roba.robaId}" id="valuta">
+			<option th:each="p : ${roba}" th:value="${p.robaId}" th:text="${p.robaNaziv}">Option1</option>
+		</select>		
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>	
+		
+	 <!-- <form class="form-container" th:fragment="poruzbenica" action="#" th:action="@{/porudzbenica}" th:object="${porudzbenica}" method="post">
+		<input type="hidden" id="korisnik.korisnikId" name="korisnik.korisnikId"  th:value="${korisnik.korisnikId}"/>
+		<div class="form-title">Korisnik naziv:</div>
+		<input class="form-field" th:field="${korisnik.korisnikNaziv}" placeholder="Text" maxlength="20" type="text" disabled="disabled" /><br />		
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>	 -->
+	<th:block  th:fragment="porudzbenica_stavke" >
+	<form class="form-container" action="#" th:action="@{/porudzbenica_stavke}" th:object="${porudzbenica_stavke}" method="post">
+		
+		<input type="hidden"  th:value="${porudzbenicaId}" id="porudzbenica.porudzbenicaId" name="porudzbenica.porudzbenicaId"/>
+				
+		<div class="form-title">Изаберите артикал:</div>
+		<select class="form-field" th:field="*{robaCenovnik.cenovnikId}">
+			<option th:each="p : ${roba}" th:value="${p.cenovnikId}" th:text="${p.roba.robaNaziv}">Option1</option>
+		</select>
+		<div class="form-title">Унесите количину:</div>
+		<input class="form-field" th:field="*{kolicina}" placeholder="Количина" maxlength="20" type="text" /><br />
+		<div class="submit-container">
+		<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	 </form>	
+	</th:block>
+	
+	<form class="form-container" th:fragment="uplata" action="#" th:action="@{/placanje}" th:object="${uplata}" method="post">
+		
+		<input type="hidden"  th:value="${korisnik.korisnikId}" id="korisnik.korisnikId" name="korisnik.korisnikId"/>
+		
+		<div class="form-title"><h2>Уплате корисника:</h2></div>
+		<div class="form-title">Уплата:</div>
+		<input class="form-field" th:field="*{iznos}" placeholder="Износ" maxlength="20" type="number" /><br />
+		<input th:field="*{datumPlacanja}" class="form-field datepicker" />
+		<div class="submit-container">
+			<input class="submit-button" type="submit" value="Submit" />
+		</div>
+	</form>
+	
+
+	
+</body>
+</html>

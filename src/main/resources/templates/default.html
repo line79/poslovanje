@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>манастир светог архиђакона Стефана</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/mystyle.css}" />
+    <link rel="stylesheet" th:href="@{/css/datepicker.css}" />
+    <script type="text/javascript" th:src="@{/js/datepicker.js}"></script>
+</head>
+<body>
+
+	<ul class="menu">
+	  <li class="dropdown">
+	  <a href="javascript:void(0)" class="dropbtn">Корисник</a>
+	    <div class="dropdown-content">
+	      <a th:href="@{/korisnik}">Листа Корисника</a>
+	      <a th:href="@{/korisnik/novi}">Нови Корисник</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a href="javascript:void(0)" class="dropbtn">Артикли</a>
+	    <div class="dropdown-content">
+	      <a th:href="@{/roba}">Артикли</a>
+	      <!-- <a href="/magacin">Magacin</a> -->
+	      <a th:href="@{/cenovnik}">Ценовник Артикала</a>
+	    </div>
+	  </li>
+	  <li class="dropdown">
+	    <a href="javascript:void(0)" class="dropbtn">Шифарници</a>
+	    <div class="dropdown-content">
+	      <a th:href="@{/vrsta_robe}">Врста Артикла</a>
+	      <a th:href="@{/valuta}">Валута</a>
+	    </div>
+	  </li>
+	</ul>
+	
+	<th:block th:if="${forms} != null">
+		<p th:replace="fragments/forms :: ${forms}" />  
+	</th:block>
+	<th:block th:if="${table} != null">
+		<p th:replace="fragments/tables :: ${table}" />  
+	</th:block>
+</body>
+</html>
