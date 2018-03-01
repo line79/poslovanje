@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	  protected void configure(HttpSecurity http) throws Exception {
-		 /*http.authorizeRequests()
+		 http.authorizeRequests()
         .antMatchers("/h2-console/**").permitAll()        
        .antMatchers("/public").permitAll()
         .anyRequest().access("hasAuthority('admin')")
@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		rememberMeParameter("remember-me-param").
 		rememberMeCookieName("my-remember-me").
 		tokenValiditySeconds(86400);
-		*/
+		
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
 	  }
